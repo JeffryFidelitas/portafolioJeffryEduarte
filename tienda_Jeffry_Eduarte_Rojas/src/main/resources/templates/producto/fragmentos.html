@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"> 
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Libreria</title>
+    </head>
     <body>
         <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
-            <div class="container">
+            <div class="container" sec:authorize="hasRole('ROLE_ADMIN')">
                 <div class="row">
                     <div class="col-md-3">   
                         <button 
@@ -120,13 +124,14 @@
                                             <td class="text-end">[[${#numbers.formatDecimal(producto.precio*producto.existencias, 1, 'DEFAULT', 2, 'DEFAULT')}]]</td>
                                             <td  class="text-center" th:text="${producto.activo} ? 'Activa' : 'Inactiva'" />
                                             <td>[[${producto.categoria.descripcion}]]</td>
-                                            <td><a th:href="@{/producto/eliminar/}+${producto.idProducto}"
-                                                   class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a></td>
                                             <td>
+                                                <a sec:authorize="hasROLE('ROLE_ADMIN')" th:href="@{/producto/eliminar/}+${producto.idProducto}"
+                                                   class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
                                                 <a th:href="@{/producto/modificar/}+${producto.idProducto}"
                                                    class="btn btn-success">
-                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a></td></tr>
+                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a>
+                                            </td></tr>
                                     </tbody>
                                 </table>
 
